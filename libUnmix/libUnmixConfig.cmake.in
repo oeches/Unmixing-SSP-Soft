@@ -1,0 +1,32 @@
+# - Config file for the libUnmix package
+# It defines the following variables
+#  LIBUNMIX_INCLUDE_DIR - include directories for libUnmix
+#  LIBUNMIX_LIBRARIES    - libraries to link against
+#  LIB_QCUSTOMPLOT - additional library that needs to be linked
+
+# Compute paths
+get_filename_component(LIBUNMIX_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(LIBUNMIX_INCLUDE_DIRS "@INSTALL_INCLUDE_DIR@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET libUnmix AND NOT libUnmix_BINARY_DIR)
+  include("${LIBUNMIX_CMAKE_DIR}/libUnmixTargets.cmake")
+endif()
+
+# These are IMPORTED targets created by libUnmixTargets.cmake
+if (UNIX)
+	set(LIBUNMIX_LIBRARY "@INSTALL_LIB_DIR@/liblibUnmix.so")
+elseif(WIN32)
+	set(LIBUNMIX_LIBRARY "@INSTALL_LIB_DIR@/libUnmix.lib")
+endif()
+message("Library file : ${LIBUNMIX_LIBRARY}")
+
+# For QCustomPlot library
+if (UNIX)
+	set(LIB_QCUSTOMPLOT debug "@INSTALL_LIB_DIR@/libqcustomplotd.so"
+	optimized "@INSTALL_LIB_DIR@/libqcustomplot.so")
+elseif (WIN32)
+	set(LIB_QCUSTOMPLOT debug "@INSTALL_LIB_DIR@/qcustomplotd2.lib"
+	optimized "@INSTALL_LIB_DIR@/qcustomplot2.lib")
+endif()
+
