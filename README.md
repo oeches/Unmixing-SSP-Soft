@@ -1,4 +1,4 @@
-# Unmixing-SSP-Soft
+# Unmixing SSP C++ library
 
 1. INTRODUCTION
 
