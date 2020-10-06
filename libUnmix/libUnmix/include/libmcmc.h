@@ -22,6 +22,26 @@ private:
     std::string m_nameMCMC;
 };
 
+inline void MCMCChains::fillInitialSamples(const arma::mat samplesInit)
+{
+    m_SampleValues.head_cols(1) = arma::vectorise(samplesInit);
+}
+
+inline void MCMCChains::fillSamples(const arma::mat samples, const unsigned int index)
+{
+    m_SampleValues.col(index) = arma::vectorise(samples);
+}
+
+inline void MCMCChains::setNameMCMC(std::string nameMCMC)
+{
+    m_nameMCMC = nameMCMC;
+}
+
+inline arma::mat MCMCChains::getNSamples(const unsigned int Nsamples, const unsigned int Nbegin) const
+{
+    return arma::trans(m_SampleValues.cols(Nbegin, Nsamples+Nbegin));
+}
+
 class LIBUNMIX_EXPORT Samples
 {
 public:
@@ -39,6 +59,31 @@ private:
     arma::mat m_currentSample;
     std::string m_name;
 };
+
+inline arma::mat Samples::getPreviousSamples() const
+{
+    return m_previousSample;
+}
+
+inline void Samples::setPreviousSamples(arma::mat sampleValue)
+{
+    m_previousSample = sampleValue;
+}
+
+inline arma::mat Samples::getCurrentSamples() const
+{
+    return m_currentSample;
+}
+
+inline void Samples::setCurrentSamples(arma::mat sampleValue)
+{
+    m_currentSample = sampleValue;
+}
+
+inline unsigned int Samples::getDimension() const
+{
+    return m_dimension;
+}
 
 class LIBUNMIX_EXPORT SamplerMCMC
 {
@@ -86,6 +131,41 @@ private:
 
 };
 
+inline arma::vec MwG_abundances::getTx() const
+{
+    return m_Tx;
+}
+
+inline void MwG_abundances::setTx(const arma::vec TxVal)
+{
+    m_Tx = TxVal;
+}
+
+inline arma::vec MwG_abundances::getRandomWalk() const
+{
+    return m_varRandomWalk;
+}
+
+inline void MwG_abundances::setRandomWalk(const arma::vec randomWalkVar)
+{
+    m_varRandomWalk = randomWalkVar;
+}
+
+inline void MwG_abundances::setmCompt(const unsigned int m_compt)
+{
+    m_mCompt = m_compt;
+}
+
+inline void MwG_abundances::setSamplesRho(const Samples samplesRho)
+{
+    m_samplesRho = samplesRho;
+}
+
+inline Samples MwG_abundances::getSamplesRho()
+{
+    return m_samplesRho;
+}
+
 class LIBUNMIX_EXPORT GibbsForVariance : public SamplerMCMC
 {
 public:
@@ -98,6 +178,11 @@ private:
     double m_delta;
 };
 
+inline void GibbsForVariance::setDelta(const double delta)
+{
+    m_delta = delta;
+}
+
 class LIBUNMIX_EXPORT GibbsForHyperparameter : public SamplerMCMC
 {
 public:
@@ -106,5 +191,13 @@ public:
     virtual void generateSamples(const Samples samplesSig, Samples &samplesDelta);
 
 };
+
+inline void GibbsForHyperparameter::generateSamples(const Samples samplesSig, Samples &samplesDelta)
+{
+    double sig2 = samplesSig.getCurrentSamples()(0,0);
+
+    samplesDelta.setCurrentSamples(arma::randg(arma::distr_param(1., sig2))*arma::ones(1,1));
+
+}
 
 #endif // LIBMCMC_H

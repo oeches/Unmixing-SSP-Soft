@@ -19,26 +19,6 @@ MCMCChains::~MCMCChains()
 
 }
 
-void MCMCChains::fillInitialSamples(const arma::mat samplesInit)
-{
-    m_SampleValues.head_cols(1) = arma::vectorise(samplesInit);
-}
-
-void MCMCChains::fillSamples(const arma::mat samples, const unsigned int index)
-{
-    m_SampleValues.col(index) = arma::vectorise(samples);
-}
-
-void MCMCChains::setNameMCMC(std::string nameMCMC)
-{
-    m_nameMCMC = nameMCMC;
-}
-
-arma::mat MCMCChains::getNSamples(const unsigned int Nsamples, const unsigned int Nbegin) const
-{
-    return arma::trans(m_SampleValues.cols(Nbegin, Nsamples+Nbegin));
-}
-
 Samples::Samples(const unsigned int dimension, const std::string name, const arma::mat sampleInit)
     : m_dimension(dimension), m_name(name)
 {
@@ -50,31 +30,6 @@ Samples::Samples(const unsigned int dimension, const std::string name, const arm
 Samples::~Samples()
 {
 
-}
-
-arma::mat Samples::getPreviousSamples() const
-{
-    return m_previousSample;
-}
-
-void Samples::setPreviousSamples(arma::mat sampleValue)
-{
-    m_previousSample = sampleValue;
-}
-
-arma::mat Samples::getCurrentSamples() const
-{
-    return m_currentSample;
-}
-
-void Samples::setCurrentSamples(arma::mat sampleValue)
-{
-    m_currentSample = sampleValue;
-}
-
-unsigned int Samples::getDimension() const
-{
-    return m_dimension;
 }
 
 SamplerMCMC::SamplerMCMC(const arma::mat spectraPix, const arma::mat endmSpectra) : m_spectraPix(spectraPix), m_EndmSpectra(endmSpectra)
@@ -109,40 +64,6 @@ MwG_abundances::MwG_abundances(const arma::mat spectraPix, const arma::mat endmS
 MwG_abundances::~MwG_abundances()
 {
 
-}
-
-arma::vec MwG_abundances::getTx() const
-{
-    return m_Tx;
-}
-
-void MwG_abundances::setTx(const arma::vec TxVal)
-{
-    m_Tx = TxVal;
-}
-arma::vec MwG_abundances::getRandomWalk() const
-{
-    return m_varRandomWalk;
-}
-
-void MwG_abundances::setRandomWalk(const arma::vec randomWalkVar)
-{
-    m_varRandomWalk = randomWalkVar;
-}
-
-void MwG_abundances::setmCompt(const unsigned int m_compt)
-{
-    m_mCompt = m_compt;
-}
-
-void MwG_abundances::setSamplesRho(const Samples samplesRho)
-{
-    m_samplesRho = samplesRho;
-}
-
-Samples MwG_abundances::getSamplesRho()
-{
-    return m_samplesRho;
 }
 
 void MwG_abundances::generateSamples(const Samples samplesSig, Samples &samplesAb)
@@ -273,11 +194,6 @@ GibbsForVariance::~GibbsForVariance()
 
 }
 
-void GibbsForVariance::setDelta(const double delta)
-{
-    m_delta = delta;
-}
-
 void GibbsForVariance::generateSamples(const Samples samplesAb, Samples &samplesSig)
 {
     unsigned int L = m_EndmSpectra.n_rows;
@@ -308,10 +224,4 @@ GibbsForHyperparameter::~GibbsForHyperparameter()
 
 }
 
-void GibbsForHyperparameter::generateSamples(const Samples samplesSig, Samples &samplesDelta)
-{
-    double sig2 = samplesSig.getCurrentSamples()(0,0);
 
-    samplesDelta.setCurrentSamples(arma::randg(arma::distr_param(1., sig2))*arma::ones(1,1));
-
-}
