@@ -9,8 +9,7 @@
 class LIBUNMIX_EXPORT libPixelSynth
 {
 public:
-    libPixelSynth() = default;
-    libPixelSynth(const libPixelSynth &) = delete;
+    libPixelSynth();
     ~libPixelSynth();
     int loadSpectraLib(const std::string fname);
     void generateSynthPixel(unsigned int endmNumb, unsigned int samplingStep, arma::Mat<double> abundances, double noiseVariance );
