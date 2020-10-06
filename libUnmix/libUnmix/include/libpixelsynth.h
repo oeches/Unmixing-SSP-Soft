@@ -1,4 +1,4 @@
-﻿#ifndef LIBPIXELSYNTH_H
+#ifndef LIBPIXELSYNTH_H
 #define LIBPIXELSYNTH_H
 
 #include "libUnmix_global.h"
@@ -9,7 +9,8 @@
 class LIBUNMIX_EXPORT libPixelSynth
 {
 public:
-    libPixelSynth();
+    libPixelSynth() = default;
+    libPixelSynth(const libPixelSynth &) = delete;
     ~libPixelSynth();
     int loadSpectraLib(const std::string fname);
     void generateSynthPixel(unsigned int endmNumb, unsigned int samplingStep, arma::Mat<double> abundances, double noiseVariance );

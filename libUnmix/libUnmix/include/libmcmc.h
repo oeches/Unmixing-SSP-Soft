@@ -1,4 +1,4 @@
-﻿#ifndef LIBMCMC_H
+#ifndef LIBMCMC_H
 #define LIBMCMC_H
 #include "libUnmix_global.h"
 #include <iostream>
@@ -9,9 +9,11 @@ class LIBUNMIX_EXPORT MCMCChains
 {
 public:
     MCMCChains(const unsigned int length, const unsigned int dimension, const std::string name);
+    MCMCChains(const MCMCChains &ChainToCopy);
     ~MCMCChains();
     void fillInitialSamples(const arma::mat samplesInit);
     void fillSamples(const arma::mat samples, const unsigned int index);
+    void setNameMCMC(std::string nameMCMC);
     arma::mat getNSamples(const unsigned int Nsamples, const unsigned int Nbegin) const;
 
 private:

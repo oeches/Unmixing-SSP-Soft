@@ -1,4 +1,4 @@
-﻿#include "include/libpixelsynth.h"
+#include "include/libpixelsynth.h"
 #include <iostream>
 #include <armadillo>
 

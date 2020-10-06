@@ -1,10 +1,17 @@
-﻿#include "include/libmcmc.h"
+#include "include/libmcmc.h"
 #include <armadillo>
 
 MCMCChains::MCMCChains(const unsigned int length, const unsigned int dimension, const std::string name) : m_lengthMCMC(length), m_nameMCMC(name)
 {
     m_SampleValues.set_size(dimension, length);
     m_SampleValues.fill(0);
+}
+
+MCMCChains::MCMCChains(const MCMCChains &ChainToCopy)
+{
+    m_lengthMCMC = ChainToCopy.m_lengthMCMC;
+    m_SampleValues = ChainToCopy.m_SampleValues;
+    m_nameMCMC = ChainToCopy.m_nameMCMC;
 }
 
 MCMCChains::~MCMCChains()
@@ -20,6 +27,11 @@ void MCMCChains::fillInitialSamples(const arma::mat samplesInit)
 void MCMCChains::fillSamples(const arma::mat samples, const unsigned int index)
 {
     m_SampleValues.col(index) = arma::vectorise(samples);
+}
+
+void MCMCChains::setNameMCMC(std::string nameMCMC)
+{
+    m_nameMCMC = nameMCMC;
 }
 
 arma::mat MCMCChains::getNSamples(const unsigned int Nsamples, const unsigned int Nbegin) const
