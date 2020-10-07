@@ -14,6 +14,15 @@ MCMCChains::MCMCChains(const MCMCChains &ChainToCopy)
     m_nameMCMC = ChainToCopy.m_nameMCMC;
 }
 
+MCMCChains &MCMCChains::operator=(const MCMCChains &otherChain)
+{
+    m_lengthMCMC = otherChain.m_lengthMCMC;
+    m_SampleValues = otherChain.m_SampleValues;
+    m_nameMCMC = otherChain.m_nameMCMC;
+
+    return *this;
+}
+
 MCMCChains::~MCMCChains()
 {
 

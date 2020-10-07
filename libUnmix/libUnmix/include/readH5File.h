@@ -3,7 +3,7 @@
 
 #include "H5Cpp.h"
 #include <armadillo>
-#include <vector>
+
 
 using namespace H5;
 
@@ -53,7 +53,7 @@ int readHDF5ToMat(H5std_string fname, H5std_string groupname, H5std_string datas
         {
             dims_out[1] = 1;
         }
-        //std::vector<T> data_out;
+
         T* data_out = new T[dims_out[0]*dims_out[1]];
         datasetDat.read(data_out, dt);
         dataMatOut.resize(dims_out[0], dims_out[1]);
@@ -66,11 +66,10 @@ int readHDF5ToMat(H5std_string fname, H5std_string groupname, H5std_string datas
                 dataMatOut(i,j) = data_out[j+i*dims_out[1]];
             }
         }
-        if (data_out !=0)
-        {
-            delete[] data_out;
-            data_out = 0;
-        }
+
+        delete[] data_out;
+        data_out = nullptr;
+
         return 0;
 
     }

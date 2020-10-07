@@ -10,6 +10,7 @@ class LIBUNMIX_EXPORT MCMCChains
 public:
     MCMCChains(const unsigned int length, const unsigned int dimension, const std::string name);
     MCMCChains(const MCMCChains &ChainToCopy);
+    MCMCChains &operator=(const MCMCChains &otherChain);
     ~MCMCChains();
     void fillInitialSamples(const arma::mat samplesInit);
     void fillSamples(const arma::mat samples, const unsigned int index);
